@@ -1,7 +1,11 @@
-var express = require('express');
- 
+var express = require('express'),
+path = require('path'); 
 var app = express();
  
+app.configure(function(){
+  app.use(express.static(path.join(__dirname, 'public'))); 
+});
+
 app.get('/drinks', function(req, res) {
     res.send([{name:'Gin Tonic', ingredient:[{name:'Gin'}, {name:'Tonic'}]}, {name:'Long Island Iced Tea'}]);
 });
