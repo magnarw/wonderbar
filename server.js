@@ -1,13 +1,29 @@
-var express = require('express'),
-path = require('path'); 
+var express = require('express');
+ 
+var mysql = require("mysql");
+var con = mysql.createConnection({
+        host:"46.137.184.176",
+        user:"root",
+        password:"treniva8227",
+        database:"wunderbar",
+        port:"3306"
+});
+con.connect();
+
 var app = express();
  
-app.configure(function(){
-  app.use(express.static(path.join(__dirname, 'public'))); 
-});
-
 app.get('/drinks', function(req, res) {
-    res.send([{name:'Gin Tonic', ingredient:[{name:'Gin'}, {name:'Tonic'}]}, {name:'Long Island Iced Tea'}]);
+	  var drinks = [];
+	   con.query("select * from drink", function(err, rows, fields) {
+	   	console.log(err);
+         rows.forEach(function(entry) {
+         	console.log("hei");
+         	var drink = {title:  entry.drink_name};
+         	drinks.push(drink);
+        });
+         console.log(drinks);
+    	res.send(drinks);
+    });
 });
  
 app.listen(3000);
