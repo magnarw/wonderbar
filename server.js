@@ -1,5 +1,7 @@
-var express = require('express');
+var express = require('express'),
+	path = require('path');
  
+
 var mysql = require("mysql");
 var con = mysql.createConnection({
         host:"46.137.184.176",
@@ -11,6 +13,10 @@ var con = mysql.createConnection({
 con.connect();
 
 var app = express();
+
+app.configure(function(){
+  app.use(express.static(path.join(__dirname, 'public')));
+});
  
 app.get('/drinks', function(req, res) {
 	  var drinks = [];
