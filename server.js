@@ -1,7 +1,12 @@
 var express = require('express'),
-    drinks  = require('./routes/routes');
+    drinks  = require('./routes/routes'),
+    path = require('path');
  
 var app = express();
+
+app.configure(function(){
+   app.use(express.static(path.join(__dirname, 'public'))); 
+});
 
 app.get('/drinks', drinks.getAllDrinks);
 app.get('/drinks/:id', drinks.getDrinkById);
