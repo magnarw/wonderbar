@@ -8,6 +8,8 @@ app.configure(function(){
    app.use(express.static(path.join(__dirname, 'public'))); 
 });
 
+app.use(express.bodyParser());
+
 app.get('/drinks', drinks.getAllDrinks);
 app.get('/drinks/:id', drinks.getDrinkById);
 app.get('/drinks/ingredients/:id', drinks.getIngredientsByDrinkId);

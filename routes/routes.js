@@ -11,7 +11,8 @@ con.connect();
 
 exports.getAllDrinks = function(req,res){
 	var drinks = [];
-	con.query("select * from drink", function(err, rows, fields) {
+	var queryString = "select * from drink";
+	con.query(queryString, function(err, rows, fields) {
 	   	
 	   	console.log(err);
         
@@ -29,6 +30,9 @@ exports.getAllDrinks = function(req,res){
 exports.getDrinkById = function(req,res){
 	var drinks = [];
 	var drink_id_in = req.params.id;
+
+	console.log(req.header);
+
 	con.query("select * from drink where drink_id = " + drink_id_in, function(err, rows, fields) {
 	   	
 	   	console.log(err);
@@ -96,19 +100,51 @@ exports.getIngredientById = function(req,res){
 };
 
 exports.getDrinkByIngredient = function (req,res){
+	
 	var ingredients_in = req.body;
-	console.log(ingredients_in);
-	res.send(ingredients_in);
 
-	/*
-	select  count(*) drinkCount, A.drink_name, A.drink_id
-	from drink_content B
-		left join drink A
-		on A.drink_id = B.drink_id
-		left join ingredient C
-		on C.ingredient_id = B.ingredient_id
-	where B.ingredient_id in(1,2,5,7,13)
-	group by drink_name;
+	var queryString = "";
 
-	*/
+	queryString += "select  count(*) drinkCount, A.drink_name, A.drink_id "
+	queryString += "from drink_content B ";
+	queryString += "left join drink A ";
+	queryString += "on A.drink_id = B.drink_id ";
+	queryString += "left join ingredient C ";
+	queryString += "on C.ingredient_id = B.ingredient_id ";
+	queryString += "where B.ingredient_id in(";
+
+	for(var i = 0; i < ingredients_in.length - 1; i++){
+
+		queryString += ingredients_in[i].id + ", ";
+		
+	}
+
+	queryString += ingredients_in[ingredients_in.length-1].id;
+	queryString += ") ";
+	queryString += "group by drink_name ";
+	queryString += "order by drinkCount DESC;";
+
+	console.log(queryString);
+
+	var drinks = [];
+
+	con.query(queryString, function(err, rows, fields) {
+	   	
+	   	console.log(err);
+        
+        rows.forEach(function(entry) {
+
+        	var matchCount 	= {matches: entry.drinkCount};
+         	var drink 		= {drink:  entry.drink_name};
+         	var drink_id 	= {id: entry.drink_id}; 
+         	
+         	drinks.push(drink);
+         	drinks.push(drink_id);
+         	drinks.push(matchCount);
+        });
+
+        console.log(drinks);
+    	res.send(drinks);
+    });
+
 }
