@@ -17,7 +17,8 @@ app.get('/drinks/ingredients/:id', drinks.getIngredientsByDrinkId);
 app.get('/ingredients', drinks.getAllIngredients);
 app.get('/ingredients/:id', drinks.getIngredientById);
  
-app.post('/drinks', drinks.getDrinkByIngredient);
+app.post('/drinks', drinks.searchForDrinkByIngredient);
+app.post('/ingredients', drinks.searchForIngredient);
 
 app.listen(3000);
 console.log('Listening on port 3000...');
