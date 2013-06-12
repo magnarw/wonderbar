@@ -9,6 +9,15 @@ var con = mysql.createConnection({
 });
 con.connect(); 
 
+/*
+	In: 
+	OUt: Get all drinks
+
+	Test with GET
+	http://localhost:3000/drink
+
+*/
+
 exports.getAllDrinks = function(req,res){
 	var drinks = [];
 	var queryString = "select * from drink";
@@ -27,6 +36,14 @@ exports.getAllDrinks = function(req,res){
     });
 };
 
+
+/*
+	In: Drink id
+	OUt: drink name
+
+	Test with GET
+	http://localhost:3000/drink/1
+*/
 exports.getDrinkById = function(req,res){
 	var drinks = [];
 	var drink_id_in = req.params.id;
@@ -48,6 +65,15 @@ exports.getDrinkById = function(req,res){
     });
 };
 
+
+/*
+	In: Drink id
+	OUt: ingredients for that drink
+
+	Test with GET
+	http://localhost:3000/drink/ingredients/1
+
+*/
 exports.getIngredientsByDrinkId = function(req,res){
 	var ingredients = [];
 	var drink_id_in = req.params.id;
@@ -66,6 +92,14 @@ exports.getIngredientsByDrinkId = function(req,res){
     });
 };
 
+/*
+	In: 
+	OUt: All ingredients
+
+	Test with GET
+	http://localhost:3000/ingredients
+
+*/
 exports.getAllIngredients = function(req,res){
 	var ingredients = [];
 	con.query("select ingredient_name,ingredient_id from ingredient", function(err, rows, fields) {
@@ -82,6 +116,16 @@ exports.getAllIngredients = function(req,res){
     });
 };
 
+
+
+/*
+	In: Ingredient id
+	OUt: ingredient name
+
+	Test with GET
+	http://localhost:3000/ingredients/3
+
+*/
 exports.getIngredientById = function(req,res){
 	var ingredients = [];
 	var ingredient_id_in = req.params.id;
@@ -99,13 +143,22 @@ exports.getIngredientById = function(req,res){
     });
 };
 
-exports.getDrinkByIngredient = function (req,res){
+
+/*
+	In: Ingredient ids
+	Out: Drinks that match by ingredients
+
+	TEst with POST, 
+	Content-Type: application/json
+	[  {    "id": "1"  },  {    "id": "2"  },  {    "id": "7"  },  {    "id": "13"  },  {    "id": "5"  } ]
+*/
+exports.searchForDrinkByIngredient = function (req,res){
 	
 	var ingredients_in = req.body;
 
 	var queryString = "";
 
-	queryString += "select  count(*) drinkCount, A.drink_name, A.drink_id "
+	queryString += "select count(*) drinkCount, A.drink_name, A.drink_id "
 	queryString += "from drink_content B ";
 	queryString += "left join drink A ";
 	queryString += "on A.drink_id = B.drink_id ";
@@ -133,14 +186,15 @@ exports.getDrinkByIngredient = function (req,res){
 	   	console.log(err);
         
         rows.forEach(function(entry) {
-
+        	var tempDrink = [];
         	var matchCount 	= {matches: entry.drinkCount};
          	var drink 		= {drink:  entry.drink_name};
          	var drink_id 	= {id: entry.drink_id}; 
          	
-         	drinks.push(drink);
-         	drinks.push(drink_id);
-         	drinks.push(matchCount);
+         	tempDrink.push(drink);
+         	tempDrink.push(drink_id);
+         	tempDrink.push(matchCount);
+         	drinks.push(tempDrink);
         });
 
         console.log(drinks);
@@ -148,3 +202,42 @@ exports.getDrinkByIngredient = function (req,res){
     });
 
 }
+
+
+
+/*
+	In: Ingredient name or beginning characters of an ingredient.
+	OUt: Ingredient_id and ingredient name of all ingredients that starts with those characters.
+
+	Test with POST
+	Content-Type: application/json
+	[  {    "name": "co"  } ]
+
+*/
+exports.searchForIngredient = function(req,res){
+
+	var ingredients = [];
+	var ingredient_name_in = req.body[0].name;
+
+	var queryString = "select ingredient_id,ingredient_name from ingredient where ingredient_name like '"+ingredient_name_in+"%'";
+	console.log(queryString);
+	con.query(queryString, function(err, rows, fields) {
+	   	
+	   	console.log(err);
+        
+        rows.forEach(function(entry) {
+        	var tempIngredient = [];
+
+         	var ingredient = {ingredient_name:  entry.ingredient_name}; 
+         	var ingredient_name = {ingredient_id:  entry.ingredient_id}; 
+
+			tempIngredient.push(ingredient);
+			tempIngredient.push(ingredient_name);
+
+         	ingredients.push(tempIngredient);
+        });
+
+        console.log(ingredients);
+    	res.send(ingredients);
+    });
+};
