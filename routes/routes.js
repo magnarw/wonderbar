@@ -68,12 +68,12 @@ exports.getIngredientsByDrinkId = function(req,res){
 
 exports.getAllIngredients = function(req,res){
 	var ingredients = [];
-	con.query("select ingredient_name from ingredient", function(err, rows, fields) {
+	con.query("select ingredient_name,ingredient_id from ingredient", function(err, rows, fields) {
 	   	
 	   	console.log(err);
         
         rows.forEach(function(entry) {
-         	var ingredient = {ingredient:  entry.ingredient_name}; 
+         	var ingredient = {ingredient:  entry.ingredient_name, id: entry.ingredient_id}; 
          	ingredients.push(ingredient);
         });
 

@@ -12,15 +12,10 @@ var AppRouter = Backbone.Router.extend({
         $('#content').html(this.homeView.el);
          var ingredientsList = new IngredientCollection();
         ingredientsList.fetch({success: function(){
-            $("#content").html(new IngredientsListView({model: ingredientsList}).el);
+            $("#ingridients").html(new IngredientsListView({model: ingredientsList}).el);
         }});
-    },
 
-	list: function() {
-        var ingredientsList = new IngredientCollection();
-        ingredientsList.fetch({success: function(){
-            $("#content").html(new IngredientsListView({model: ingredientsList}).el);
-        }});
+        var drinkSearch = new DrinkSearchView();
     }
 });
 
