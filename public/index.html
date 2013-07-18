@@ -22,8 +22,11 @@
 					
 				<ul>
 			</div>
+			<a href="#" id="searchButton">Find drinks</a> 
 			<div id="drinkResult">
-				<h1>Here is your drinks</h1>
+				<h1>You can make</h1>
+				<ul id="drinkList">
+				</ul>
 			</div>	
 		</div>
 
@@ -33,13 +36,12 @@
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	</body>	
 
-	<script>
-	
-
-	
+	<script>	
+	var ingridientsMap; 
 	$(function() {
 		var ingridients = [];
 		$.getJSON('/ingredients', function(data) {
+		   ingridientsMap = data; 
 		   $.each(data, function(i, item){
 		   		ingridients.push(item.ingredient);
 	        });
@@ -48,13 +50,51 @@
 	      source: ingridients
 	    });
 	   });
-	var addIngredient = function (ingredientName) {
-		$("#ingridentsList").append('<li><span>'+$('input[id=selectIng]').val()+'<span><span class="remove-icon"><a herf="#">x</a></span></li>');
+	var ingredientCounter = 0; 
+
+	var ingMapper = function(ingridentName){
+		var id = null; 
+		 $.each(ingridientsMap, function(i, item){
+		   		if(item.ingredient == ingridentName){
+		   			id = item;
+		   		}
+	     });
+	     return id; 
+	};
+
+	var selectedIngridents = []; 
+
+	var searchForIngredient = function () {
+		var jsonString = JSON.stringify(selectedIngridents);
+		$.ajax({
+		  type: "POST",
+		  url: "drinks",
+		  data:jsonString,
+		  dataType: "json",
+		  contentType: "application/json; charset=utf-8"
+		}).done(function( data ) {
+		 	$.each(data, function(i, item){
+		   		$("#drinkList").append('<li>'+ item[0].drink+'</li>');
+	        });
+		});
+	}
+
+	var addIngredient = function () {
+		var ingName = $('input[id=selectIng]').val();
+		$("#ingridentsList").append('<li><span>'+ingName+'<span><span class="remove-icon"><a herf="#">x</a></span></li>');
+		var ingId = ingMapper(ingName);
+		if(ingId !=null){
+			selectedIngridents.push(ingId);
+		}
+		ingredientCounter =ingredientCounter+1; 
+		if(ingredientCounter>3)
+			alert("Du har valgt fler enn tre ingridinser");
 		 return false;
 	};
 	$("#addButton").click(addIngredient);
 	var ingredientCounter = 0; 
 	
-	</script>
+	$("#searchButton").click(searchForIngredient); 
 
+	</script>
 <html>
