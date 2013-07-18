@@ -1,88 +1,117 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  text-align: left;
-  text-stroke: 1px rgba(255,255,255,0.1);
-  color: #555;
-}
-a {
-  color: #00b7ff;
-}
-h1,
-h2 {
+  padding: 0;
   margin: 0;
-  font-size: 22px;
-  color: #343434;
+  font-family: helvetica;
+  background: #F4F4EE;
 }
-h1 {
-  text-shadow: 1px 2px 2px #ddd;
+
+#container {
+  width : 1000px;
+  margin: auto; 
+  background: #F4F4EE;
+}
+#header {
+   width : 100%;
+   height: 80px;
+   background: #363231; 
+   margin: 0;
+   color: white;
+
+}
+
+#header h2 {
+  margin: 0;
   font-size: 60px;
-  margin-bottom: 0.8em;
+  padding-left: 20px;
 }
-.wrap {
-  width: 1024px;
+
+#maincontent {
+  padding: 20px;
+  width : 700px;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 20px;
+  background: #fff; 
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.4), inset 0px 1px 0px rgba(0,0,0,0.15);
+  -moz-box-shadow: 0px 1px 2px rgba(0,0,0,0.4), inset 0px 1px 0px rgba(0,0,0,0.15);
+  box-shadow: 0px 1px 2px rgba(0,0,0,0.4), inset 0px 1px 0px rgba(0,0,0,0.15);
 }
-.ctleft {
+
+#addButton {
+  color : black;
+  text-decoration: none; 
+  padding-left: 50px; 
+  padding-right:  50px; 
+  padding-top : 8px;
+  padding-bottom: 8px;
+  background :  #ffc02f;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  -moz-box-shadow: 0px 0px 1px #000000;
+  -webkit-box-shadow: 0px 0px 1px #000000;
+  box-shadow: 0px 0px 1px #000000;
+}
+
+#addButton:hover {
+    background:#fdd283;
+}
+
+#ingridentsList {
+  list-style: none;
+  overflow: hidden;
+   padding-left: 2px;
+} 
+
+#selectIng {
+  width: 300px;
+  height: 30px;
+  maring:0px;
+  padding:0px;
+  font-size: 20px; 
+}
+
+#ingridentsList li {
+  float:left;
+  font-size: 14px;
+  margin-right: 10px; 
+  border : 1px solid grey;
+  padding-left: 8px;
+  padding-right: 8px; 
+  padding-top: 4px; 
+  padding-bottom: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+} 
+
+
+#ingridentsList .remove-icon {
+  position: relative;
+  left: 4px;
+  bottom:4px;
+
+}
+#drinkResult {
+  margin-top: 120px;
+}
+
+
+.drink {
+  width: 650px;
+  margin:auto;
+  overflow: hidden;
+  border: 1px dotted grey;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+
+.drink img {
   float: left;
-  width: 23%;
+  overflow: hidden;
 }
-a.addButton {
-  float: right;
-  padding: 8px 20px;
-  background-color: #00008b;
-  font-weight: bold;
-  color: #fff;
-  font-size: 3em;
-  text-decoration: none;
-}
-.ctright {
-  float: left;
-  width: 72%;
-  margin-left: 5%;
-}
-#codolists {
-  text-align: left;
-}
-#codolists .list {
-  padding: 20px;
-  margin-bottom: 10px;
-  background-color: #add8e6;
-  color: #fff;
-}
-#codolists .list .created_at {
-  display: none;
-}
-#codolists .list .title {
-  font-weight: bold;
-  font-size: 1.1em;
-}
-#codolists .list .name {
-  display: none;
-}
-.newlist {
-  padding: 20px;
-  margin-bottom: 10px;
-  background-color: #add8e6;
-  color: #fff;
-}
-div {
-  display: block;
-}
-input[type =text] {
-  width: 200px;
-}
-input[type =button],
-input[type =submit] {
-  clear: both;
-  text-align: left;
-  display: block;
-}
-.label {
-  width: 50px;
-  margin-right: 20px;
-  display: block;
-  float: left;
-}
+

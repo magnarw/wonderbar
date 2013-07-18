@@ -2,30 +2,59 @@
 <html>
 	<head charset="utf-8">
 		<title>WonderBar</title>
-		<link href="css/bootstrap.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet"/>
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 	</head>
 	<body>
-	<div class="container">
-	    <div class="row-fluid">
-	        <div id="ingridients" class="span12>">
+	<div id="header">
+		<h2>wunderbar</h2>
+	</div>
+	<div id="container">
+		<div id="maincontent">
+			<div id="addIngrident">
+				<h1>Select your ingridents</h1>
+				<input type="text" id="selectIng" class="ui-autocomplete-input">
+				</input>
+				<a href="#" id="addButton">Add ingridient</a>
+			</div>
+			<div id="selectedIngridents">
+				<ul id="ingridentsList">
+					
+				<ul>
+			</div>
+			<div id="drinkResult">
+				<h1>Here is your drinks</h1>
+			</div>	
+		</div>
 
-	        </div>
-	        <div id="drinkSearch">
-	        	<a href="#" class="btn btn-lagre">Feth my drinks</a>
-	        </div>
-	    </div>
 	</div>
 
 	<script src="lib/jquery-1.8.2.min.js"></script>
-	<script src="lib/underscore-min.js"></script>
-	<script src="lib/backbone.js"></script>
-	
-	<script src="js/utils.js"></script>
-	<script src="js/models/models.js"></script>
-	<script src="js/views/home.js"></script>
-	<script src="js/views/drinksearch.js"></script>
-	<script src="js/views/ingredientslist.js"></script>
-	<script src="js/main.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	</body>	
+
+	<script>
+	
+
+	
+	$(function() {
+		var ingridients = [];
+		$.getJSON('/ingredients', function(data) {
+		   $.each(data, function(i, item){
+		   		ingridients.push(item.ingredient);
+	        });
+		});
+	    $("#selectIng").autocomplete({
+	      source: ingridients
+	    });
+	   });
+	var addIngredient = function (ingredientName) {
+		$("#ingridentsList").append('<li><span>'+$('input[id=selectIng]').val()+'<span><span class="remove-icon"><a herf="#">x</a></span></li>');
+		 return false;
+	};
+	$("#addButton").click(addIngredient);
+	var ingredientCounter = 0; 
+	
+	</script>
 
 <html>
