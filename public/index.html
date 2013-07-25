@@ -15,19 +15,8 @@
 				<h1>Select your ingridents</h1>
 				<input type="text" id="selectIng" class="ui-autocomplete-input">
 				</input>
-				<a href="#" id="addButton">Add ingridient</a>
+				<a href="#" id="searchButton">Find drinks</a> 
 			</div>
-			<div id="selectedIngridents">
-				<ul id="ingridentsList">
-					
-				<ul>
-			</div>
-			<a href="#" id="searchButton">Find drinks</a> 
-			<div id="drinkResult">
-				<h1>You can make</h1>
-				<ul id="drinkList">
-				</ul>
-			</div>	
 		</div>
 
 	</div>
@@ -46,10 +35,13 @@
 		   		ingridients.push(item.ingredient);
 	        });
 		});
-	    $("#selectIng").autocomplete({
-	      source: ingridients
-	    });
-	   });
+		function split( val ) {
+	      return val.split( /,\s*/ );
+	    }
+	    function extractLast( term ) {
+	      return split( term ).pop();
+	    }
+
 	var ingredientCounter = 0; 
 
 	var ingMapper = function(ingridentName){
@@ -62,8 +54,6 @@
 	     return id; 
 	};
 
-	var selectedIngridents = []; 
-
 	var searchForIngredient = function () {
 		var jsonString = JSON.stringify(selectedIngridents);
 		$.ajax({
@@ -74,27 +64,42 @@
 		  contentType: "application/json; charset=utf-8"
 		}).done(function( data ) {
 		 	$.each(data, function(i, item){
-		   		$("#drinkList").append('<li>'+ item[0].drink+'</li>');
+		   		alert("Treff på: " +  item[0].drink);
 	        });
 		});
 	}
-
-	var addIngredient = function () {
-		var ingName = $('input[id=selectIng]').val();
-		$("#ingridentsList").append('<li><span>'+ingName+'<span><span class="remove-icon"><a herf="#">x</a></span></li>');
-		var ingId = ingMapper(ingName);
-		if(ingId !=null){
-			selectedIngridents.push(ingId);
-		}
-		ingredientCounter =ingredientCounter+1; 
-		if(ingredientCounter>3)
-			alert("Du har valgt fler enn tre ingridinser");
-		 return false;
-	};
-	$("#addButton").click(addIngredient);
-	var ingredientCounter = 0; 
-	
 	$("#searchButton").click(searchForIngredient); 
+
+	var selectedIngridents = []; 
+	    
+	 $("#selectIng").autocomplete({
+	 	source: function( request, response ) {
+          // delegate back to autocomplete, but extract the last term
+          response( $.ui.autocomplete.filter(
+            ingridients, extractLast( request.term ) ) );
+        },
+	      
+	    focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+          var terms = split( this.value );
+          // remove the current input
+          terms.pop();
+          // add the selected item
+          terms.push( ui.item.value );
+          var ingId = ingMapper(ui.item.value);
+          if(ingId !=null){
+			selectedIngridents.push(ingId);
+		   }
+          // add placeholder to get the comma-and-space at the end
+          terms.push( "" );
+          this.value = terms.join( ", " );
+          return false;
+        }
+	    });
+	   });
 
 	</script>
 <html>
