@@ -4,6 +4,8 @@
 		<title>WonderBar</title>
 		<link href="css/style.css" rel="stylesheet"/>
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+		<link rel="stylesheet" type="text/css" href="css/token-input.css" />
+		<link rel="stylesheet" type="text/css" href="css/token-input-facebook.css" />
 	</head>
 	<body>
 	<div id="header">
@@ -13,49 +15,31 @@
 		<div id="maincontent">
 			<div id="addIngrident">
 				<h1>Select your ingridents</h1>
-				<input type="text" id="selectIng" class="ui-autocomplete-input">
+				<input type="text" id="demo-input-facebook-theme" class="ui-autocomplete-input">
 				</input>
-				<a href="#" id="searchButton">Find drinks</a> 
 			</div>
 		</div>
-
+		<div>
+			<a href="#" id="searchButton">Find drinks</a> 
+		</div>
 	</div>
 
 	<script src="lib/jquery-1.8.2.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<script type="text/javascript" src="lib/jquery.tokeninput.js"></script>
 	</body>	
 
 	<script>	
 	var ingridientsMap; 
 	$(function() {
-		var ingridients = [];
-		$.getJSON('/ingredients', function(data) {
-		   ingridientsMap = data; 
-		   $.each(data, function(i, item){
-		   		ingridients.push(item.ingredient);
-	        });
-		});
-		function split( val ) {
-	      return val.split( /,\s*/ );
-	    }
-	    function extractLast( term ) {
-	      return split( term ).pop();
-	    }
 
-	var ingredientCounter = 0; 
-
-	var ingMapper = function(ingridentName){
-		var id = null; 
-		 $.each(ingridientsMap, function(i, item){
-		   		if(item.ingredient == ingridentName){
-		   			id = item;
-		   		}
-	     });
-	     return id; 
-	};
+		 $("#demo-input-facebook-theme").tokenInput("/ingredients", {
+                theme: "facebook"
+            }); 
 
 	var searchForIngredient = function () {
-		var jsonString = JSON.stringify(selectedIngridents);
+		//var jsonString = JSON.stringify(selectedIngridents);
+		var jsonString =  JSON.stringify($("#demo-input-facebook-theme").tokenInput("get"));
 		$.ajax({
 		  type: "POST",
 		  url: "drinks",
@@ -70,36 +54,7 @@
 	}
 	$("#searchButton").click(searchForIngredient); 
 
-	var selectedIngridents = []; 
-	    
-	 $("#selectIng").autocomplete({
-	 	source: function( request, response ) {
-          // delegate back to autocomplete, but extract the last term
-          response( $.ui.autocomplete.filter(
-            ingridients, extractLast( request.term ) ) );
-        },
-	      
-	    focus: function() {
-          // prevent value inserted on focus
-          return false;
-        },
-        select: function( event, ui ) {
-          var terms = split( this.value );
-          // remove the current input
-          terms.pop();
-          // add the selected item
-          terms.push( ui.item.value );
-          var ingId = ingMapper(ui.item.value);
-          if(ingId !=null){
-			selectedIngridents.push(ingId);
-		   }
-          // add placeholder to get the comma-and-space at the end
-          terms.push( "" );
-          this.value = terms.join( ", " );
-          return false;
-        }
-	    });
-	   });
+	 });
 
 	</script>
 <html>
