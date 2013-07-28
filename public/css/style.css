@@ -14,7 +14,7 @@ html {
 }
 
 #container {
-  width : 1000px;
+  width : 610px;
   margin: auto; 
   margin-left: auto;
   margin-right: auto;
@@ -37,10 +37,14 @@ html {
 }
 
 #maincontent {
-  padding: 20px;
+  opacity:0.9;
+  padding-bottom: 20px;
+  padding-top : 1px;
+  padding-left: 20px;
+  padding-right: 15px;
   width : 610px;
   margin-top: 80px;
-  background: #fff; 
+  background: #e6e6e6; 
   -webkit-border-radius: 7px;
   -moz-border-radius: 7px;
   border-radius: 7px;
@@ -70,6 +74,7 @@ html {
 }
 
 #searchButton {
+   opacity:1;
   color : white;
   text-decoration: none; 
   font-size: 20px;
